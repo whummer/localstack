@@ -61,6 +61,10 @@ PORT_WEB_UI = int(os.environ.get('PORT_WEB_UI', '').strip() or DEFAULT_PORT_WEB_
 # IP of the docker bridge used to enable access between containers
 DOCKER_BRIDGE_IP = os.environ.get('DOCKER_BRIDGE_IP', '').strip() or '172.17.0.1'
 
+# address of local DNS server (the default is a fairly arbitrarily
+# chosen IP address that should not clash with local network ranges)
+DNS_ADDRESS = os.environ.get('DNS_ADDRESS') or '200.200.55.55'
+
 # whether to use Lambda functions in a Docker container
 LAMBDA_EXECUTOR = os.environ.get('LAMBDA_EXECUTOR', '').strip()
 if not LAMBDA_EXECUTOR:

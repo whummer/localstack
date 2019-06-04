@@ -1,4 +1,5 @@
 import sys
+from localstack.services import edge, dns_server
 from localstack.services.es import es_starter
 from localstack.services.s3 import s3_listener, s3_starter
 from localstack.services.sns import sns_listener
@@ -19,6 +20,10 @@ from localstack.services.cloudformation import cloudformation_listener, cloudfor
 
 def register_localstack_plugins():
     try:
+        # Prepare network interfaces for DNS server and edge gateway. NOTE: This call
+        # needs to remain here because it is also required when running LocalStack in Docker
+        dns_server.setup_network_configuration()
+
         register_plugin(Plugin('es',
             start=start_elasticsearch_service))
         register_plugin(Plugin('elasticsearch',
@@ -76,6 +81,8 @@ def register_localstack_plugins():
         register_plugin(Plugin('stepfunctions',
             start=stepfunctions_starter.start_stepfunctions,
             listener=stepfunctions_listener.UPDATE_STEPFUNCTIONS))
+        register_plugin(Plugin('edge',
+            start=edge.start_edge))
     except Exception as e:
         print('Unable to register plugins: %s' % e)
         sys.stdout.flush()
